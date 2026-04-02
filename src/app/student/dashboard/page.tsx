@@ -1,19 +1,11 @@
-/**
- * Student Dashboard Page
- * 
- * Main student dashboard page with all components
- * Following component design rules from docs/component-design-rules.md
- */
-
 'use client'
 
 import React, { useState } from 'react'
 import {
+  StudentLayout,
   StudentInfoCard,
   StatsWidget,
   DashboardTabs,
-  StudentSidebar,
-  defaultNavItems,
   CourseRegistrationTab,
   ElectionTab,
   TimetableTab,
@@ -26,8 +18,9 @@ import {
 import { GradesView } from '@/components/dashboard/GradesView'
 import SupportChat from '@/components/features/SupportChat'
 import type { StudentInfo, UnitStats, FeeInfo, DashboardTab } from '@/types/studentDashboard'
+import { Bell, ArrowRight } from 'lucide-react'
+import Link from 'next/link'
 
-// Mock data - in production, this would come from an API or server component
 const mockStudentInfo: StudentInfo = {
   matricNumber: '2005003013',
   regNumber: '22259597CF',
@@ -84,114 +77,93 @@ const mockNotifications = [
 ]
 
 export default function StudentDashboardPage() {
-  const [activeNav, setActiveNav] = useState('dashboard')
-
   const dashboardTabs: DashboardTab[] = [
     {
       id: 'registration',
       label: 'My Registration',
-      icon: '📱',
+      icon: 'registration',
       content: <CourseRegistrationTab courses={mockCourses} />,
     },
     {
       id: 'grades',
       label: 'Grades',
-      icon: '📊',
+      icon: 'grades',
       content: <GradesView />,
     },
     {
       id: 'election',
       label: 'Online Election',
-      icon: '🎁',
+      icon: 'election',
       content: <ElectionTab polls={mockPolls} />,
     },
     {
       id: 'timetable',
       label: 'Lecture Timetable',
-      icon: '📅',
+      icon: 'timetable',
       content: <TimetableTab entries={mockTimetable} />,
     },
     {
       id: 'notifications',
       label: 'Notifications',
-      icon: '🔔',
+      icon: 'notifications',
       content: <NotificationsTab notifications={mockNotifications} />,
     },
   ]
 
-  const handleLogout = () => {
-    // Handle logout logic
-    window.location.href = '?logout=1'
-  }
-
-  const handleEditProfile = () => {
-    window.location.href = '#profile/edit_biodata'
-  }
-
-  const handleChangePassword = () => {
-    window.location.href = '#profile/change_password'
-  }
-
-  const handleNavigate = (item: { id: string; href?: string }) => {
-    setActiveNav(item.id)
-    if (item.href) {
-      window.location.href = item.href
-    }
-  }
+  const unreadNotifications = mockNotifications.filter((n) => !n.read).length
 
   return (
-    <div className="min-h-screen bg-gray-100 flex">
-      {/* Sidebar */}
-      <div className="fixed left-0 top-0 h-full z-50">
-        <StudentSidebar
-          items={defaultNavItems}
-          logoSrc="../images/newllogo.png"
-          studentName={`${mockStudentInfo.firstName} ${mockStudentInfo.lastName}`}
-          studentImage={mockStudentInfo.profileImage}
-          activeItem={activeNav}
-          onNavigate={handleNavigate}
-        />
-      </div>
-
-      {/* Main Content */}
-      <div className="flex-1 ml-64 p-6">
+    <StudentLayout studentName={`${mockStudentInfo.firstName} ${mockStudentInfo.lastName}`} studentImage={mockStudentInfo.profileImage}>
+      <div className="min-h-screen bg-neutral-950">
         {/* Page Header */}
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-800">
-            <span className="mr-2">🏠</span>
-            Dashboard
-            <span className="ml-3 text-sm font-normal text-green-600 bg-green-100 px-3 py-1 rounded">
-              Welcome Back {mockStudentInfo.firstName}!
-            </span>
-          </h1>
+        <div className="bg-neutral-900 border-b border-neutral-800 px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-white flex items-center gap-3">
+                Dashboard
+                <span className="px-3 py-1 text-sm font-normal bg-green-500/20 text-green-400 rounded-full">
+                  Welcome Back {mockStudentInfo.firstName}!
+                </span>
+              </h1>
+            </div>
+            <Link
+              href="/student/notifications"
+              className="relative p-2 rounded-lg bg-neutral-800 border border-neutral-700 hover:border-yellow-600 transition-colors"
+            >
+              <Bell className="w-5 h-5 text-neutral-400" />
+              {unreadNotifications > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                  {unreadNotifications}
+                </span>
+              )}
+            </Link>
+          </div>
         </div>
 
-        {/* Content Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Left Column - Student Info */}
-          <div className="lg:col-span-1 space-y-6">
-            <StudentInfoCard
-              student={mockStudentInfo}
-              onLogout={handleLogout}
-              onEditProfile={handleEditProfile}
-              onChangePassword={handleChangePassword}
-            />
-            <QuickStatsWidget />
-          </div>
-
-          {/* Right Column - Widgets & Tabs */}
-          <div className="lg:col-span-3 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <QuickLinksWidget />
-              <DeadlinesWidget />
+        {/* Content */}
+        <div className="p-6">
+          {/* Content Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            {/* Left Column - Student Info */}
+            <div className="lg:col-span-1 space-y-6">
+              <StudentInfoCard student={mockStudentInfo} />
+              <QuickStatsWidget />
             </div>
-            <AnnouncementsPreview />
-            <StatsWidget unitStats={mockUnitStats} feeInfo={mockFeeInfo} />
-            <DashboardTabs tabs={dashboardTabs} defaultTab="registration" />
+
+            {/* Right Column - Widgets & Tabs */}
+            <div className="lg:col-span-3 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <QuickLinksWidget />
+                <DeadlinesWidget />
+              </div>
+              <AnnouncementsPreview />
+              <StatsWidget unitStats={mockUnitStats} feeInfo={mockFeeInfo} />
+              <DashboardTabs tabs={dashboardTabs} defaultTab="registration" />
+            </div>
           </div>
         </div>
       </div>
       <SupportChat />
-    </div>
+    </StudentLayout>
   )
 }

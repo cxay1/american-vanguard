@@ -7,7 +7,8 @@ import {
   CourseFilters,
 } from '@/components/courses'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { StudentSidebar, defaultNavItems } from '@/components/features/student-dashboard'
+import { StudentLayout } from '@/components/features/student-dashboard'
+import { GraduationCap, Search } from 'lucide-react'
 
 interface Course {
   id: number
@@ -70,11 +71,8 @@ export default function StudentCoursesPage() {
 
   useEffect(() => {
     fetchCourses()
-  }, [fetchCourses])
-
-  useEffect(() => {
     fetchMyCourses()
-  }, [fetchMyCourses])
+  }, [fetchCourses, fetchMyCourses])
 
   const handleRegister = async (courseId: number) => {
     try {
@@ -111,76 +109,66 @@ export default function StudentCoursesPage() {
   const registeredCourseIds = registrations.map((r) => r.course.id)
   const totalCredits = registrations.reduce((sum, r) => sum + r.course.credits, 0)
 
-  const handleNavigate = (item: { id: string; href?: string }) => {
-    if (item.href) {
-      window.location.href = item.href
-    }
-  }
-
   return (
-    <div className="min-h-screen bg-gray-100 flex">
-      <div className="fixed left-0 top-0 h-full z-50">
-        <StudentSidebar
-          items={defaultNavItems}
-          logoSrc="../images/newllogo.png"
-          studentName="Student"
-          studentImage=""
-          activeItem="course"
-          onNavigate={handleNavigate}
-        />
-      </div>
-
-      <div className="flex-1 ml-64 p-6">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex justify-between items-center mb-6">
+    <StudentLayout studentName="Adeniyi Victor">
+      <div className="min-h-screen bg-neutral-950">
+        {/* Header */}
+        <div className="bg-neutral-900 border-b border-neutral-800 px-6 py-4">
+          <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">
+              <h1 className="text-2xl font-bold text-white flex items-center gap-3">
+                <GraduationCap className="w-6 h-6 text-yellow-500" />
                 Course Registration
               </h1>
-              <p className="text-gray-500">Fall 2025 • 2025/2026 Academic Year</p>
+              <p className="text-neutral-400 mt-1">{semester} • {academicYear} Academic Year</p>
             </div>
-            <div className="bg-white rounded-lg shadow px-4 py-2">
-              <p className="text-sm text-gray-500">Registered Credits</p>
-              <p className="text-xl font-bold text-yellow-600">{totalCredits}</p>
+            <div className="bg-neutral-800 rounded-lg px-4 py-3 border border-neutral-700">
+              <p className="text-sm text-neutral-400">Registered Credits</p>
+              <p className="text-xl font-bold text-yellow-500">{totalCredits}</p>
             </div>
           </div>
+        </div>
 
+        {/* Content */}
+        <div className="p-6">
           <Tabs defaultValue="catalog">
-            <TabsList>
-              <TabsTrigger value="catalog">Course Catalog</TabsTrigger>
-              <TabsTrigger value="my">
+            <TabsList className="bg-neutral-800 border border-neutral-700">
+              <TabsTrigger value="catalog" className="data-[state=active]:bg-yellow-600 data-[state=active]:text-white">
+                Course Catalog
+              </TabsTrigger>
+              <TabsTrigger value="my" className="data-[state=active]:bg-yellow-600 data-[state=active]:text-white">
                 My Courses ({registrations.length})
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="catalog">
-            <div className="mb-6">
-              <CourseFilters
-                search={search}
-                departmentId={departmentId}
-                semester={semester}
-                onSearchChange={setSearch}
-                onDepartmentChange={setDepartmentId}
-                onSemesterChange={setSemester}
-                departments={[]}
-              />
-            </div>
-
-            {loading ? (
-              <div className="text-center py-12">
-                <p className="text-gray-500">Loading courses...</p>
+            <TabsContent value="catalog" className="mt-6">
+              <div className="mb-6">
+                <CourseFilters
+                  search={search}
+                  departmentId={departmentId}
+                  semester={semester}
+                  onSearchChange={setSearch}
+                  onDepartmentChange={setDepartmentId}
+                  onSemesterChange={setSemester}
+                  departments={[]}
+                />
               </div>
-            ) : (
-              <CourseCatalog
-                courses={courses}
-                registeredCourseIds={registeredCourseIds}
-                onRegister={handleRegister}
-                onDrop={(id) => handleDrop(id)}
-              />
-            )}
-          </TabsContent>
 
-            <TabsContent value="my">
+              {loading ? (
+                <div className="flex items-center justify-center py-12">
+                  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-yellow-600"></div>
+                </div>
+              ) : (
+                <CourseCatalog
+                  courses={courses}
+                  registeredCourseIds={registeredCourseIds}
+                  onRegister={handleRegister}
+                  onDrop={(id) => handleDrop(id)}
+                />
+              )}
+            </TabsContent>
+
+            <TabsContent value="my" className="mt-6">
               <RegisteredCourses
                 courses={registrations}
                 onDrop={handleDrop}
@@ -189,6 +177,6 @@ export default function StudentCoursesPage() {
           </Tabs>
         </div>
       </div>
-    </div>
+    </StudentLayout>
   )
 }
