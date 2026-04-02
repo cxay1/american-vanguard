@@ -9,20 +9,20 @@ export const registrations = {
   findFirst: async (query: any) => {
     const Model = await getModel()
     const q = handleQuery(query)
-    let result = Model.findOne(q.where)
+    let result: any = Model.findOne(q.where)
     result = await applyInclude(result, q.include)
     return result
   },
   findUnique: async (query: { where: any; include?: any }) => {
     const Model = await getModel()
-    let result = Model.findOne(query.where)
+    let result: any = Model.findOne(query.where)
     result = await applyInclude(result, query.include)
     return result
   },
   findMany: async (query: any) => {
     const Model = await getModel()
     const q = handleQuery(query)
-    let result = Model.find(q.where || {})
+    let result: any = Model.find(q.where || {})
     result = await applyInclude(result, q.include)
     return result
   },

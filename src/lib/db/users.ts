@@ -18,7 +18,7 @@ export const users = {
   findMany: async (query: any) => {
     const Model = await getModel()
     const q = handleQuery(query)
-    let builder = Model.find(q.where || {})
+    let builder: any = Model.find(q.where || {})
     if (q.orderBy) builder = builder.sort(parseOrderBy(q.orderBy))
     return builder
   },

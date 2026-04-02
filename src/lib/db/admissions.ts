@@ -9,7 +9,7 @@ export const admissions = {
   findFirst: async (query: any) => {
     const Model = await getModel()
     const q = handleQuery(query)
-    let builder = Model.findOne(q.where || {})
+    let builder: any = Model.findOne(q.where || {})
     if (q.select) builder = builder.select(q.select)
     if (q.orderBy) builder = builder.sort(parseOrderBy(q.orderBy))
     const results = await builder.limit(1)
@@ -18,7 +18,7 @@ export const admissions = {
   findMany: async (query: any) => {
     const Model = await getModel()
     const q = handleQuery(query)
-    let builder = Model.find(q.where || {})
+    let builder: any = Model.find(q.where || {})
     if (q.orderBy) builder = builder.sort(parseOrderBy(q.orderBy))
     return builder
   },

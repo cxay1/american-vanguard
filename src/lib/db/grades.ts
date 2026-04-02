@@ -9,14 +9,14 @@ export const grades = {
   findFirst: async (query: any) => {
     const Model = await getModel()
     const q = handleQuery(query)
-    let result = Model.findOne(q.where)
+    let result: any = Model.findOne(q.where)
     result = await applyInclude(result, q.include)
     return result
   },
   findMany: async (query: any) => {
     const Model = await getModel()
     const q = handleQuery(query)
-    let result = Model.find(q.where || {})
+    let result: any = Model.find(q.where || {})
     if (q.orderBy) result = result.sort(parseOrderBy(q.orderBy))
     result = await applyInclude(result, q.include)
     return result

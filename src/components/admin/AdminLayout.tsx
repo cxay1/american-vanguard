@@ -76,21 +76,21 @@ export function AdminStats({ stats }: AdminStatsProps) {
   )
 }
 
-interface AdminSearchFilterProps {
+interface AdminSearchFilterProps<T extends string = string> {
   searchQuery: string
   onSearchChange: (value: string) => void
-  filterType: string
-  onFilterChange: (value: string) => void
-  filterOptions: { value: string; label: string }[]
+  filterType: T
+  onFilterChange: (value: T) => void
+  filterOptions: { value: T; label: string }[]
 }
 
-export function AdminSearchFilter({ 
+export function AdminSearchFilter<T extends string>({ 
   searchQuery, 
   onSearchChange,
   filterType,
   onFilterChange,
   filterOptions
-}: AdminSearchFilterProps) {
+}: AdminSearchFilterProps<T>) {
   return (
     <div className="flex gap-4">
       <div className="flex-1 relative">
@@ -105,7 +105,7 @@ export function AdminSearchFilter({
       </div>
       <select
         value={filterType}
-        onChange={(e) => onFilterChange(e.target.value)}
+        onChange={(e) => onFilterChange(e.target.value as T)}
         className="px-4 py-2 bg-neutral-900 border border-neutral-800 rounded-lg text-white focus:ring-2 focus:ring-yellow-600 focus:border-transparent"
       >
         {filterOptions.map(opt => (
