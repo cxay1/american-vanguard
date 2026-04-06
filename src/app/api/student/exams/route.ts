@@ -3,6 +3,8 @@ import { auth } from '@clerk/nextjs/server'
 import { db } from '@/lib/prisma'
 import { z } from 'zod'
 
+export const dynamic = 'force-dynamic'
+
 function errorResponse(message: string, status: number) {
   return NextResponse.json({ error: message }, { status })
 }

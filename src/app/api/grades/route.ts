@@ -3,6 +3,8 @@ import { db } from '@/lib/prisma'
 import { gradeQuerySchema, gradeCreateSchema, gradeUpdateSchema } from '@/lib/api-schemas'
 import { ZodError } from 'zod'
 
+export const dynamic = 'force-dynamic'
+
 function errorResponse(message: string, status: number) {
   return NextResponse.json({ error: message }, { status })
 }

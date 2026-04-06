@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
 import { z } from 'zod'
 
+export const dynamic = 'force-dynamic'
+
 const GradeSchema = z.object({
   studentId: z.string().min(1),
   studentName: z.string().min(1),

@@ -4,6 +4,8 @@ import { z } from 'zod'
 import { db } from '@/lib/prisma'
 import { validateRequest, schemas } from '@/lib/validators'
 
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: NextRequest) {
   let userId: string | null = null
   

@@ -14,13 +14,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
 import { processAcceptance, getAcceptanceLetter } from '@/services/acceptanceLetterService'
 
-/**
- * POST - Generate acceptance letter PDF
- * 
- * Body: { applicationId: number }
- * 
- * Returns: PDF buffer or error
- */
+export const dynamic = 'force-dynamic'
+
 export async function POST(request: NextRequest) {
   try {
     // Authenticate user

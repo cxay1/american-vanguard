@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
 import { z } from 'zod'
 
+export const dynamic = 'force-dynamic'
+
 const QuizSchema = z.object({
   title: z.string().min(1),
   description: z.string().optional(),

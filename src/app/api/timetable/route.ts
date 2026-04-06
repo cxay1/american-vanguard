@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@clerk/nextjs/server'
 import { z } from 'zod'
 
+export const dynamic = 'force-dynamic'
+
 const TimetableEntrySchema = z.object({
   courseCode: z.string().min(1),
   courseName: z.string().min(1),

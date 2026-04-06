@@ -321,3 +321,122 @@ export const ADMISSIONS_STAGE_ICONS: Record<string, React.ComponentType<{ classN
   UserPlus,
   Calendar,
 }
+
+/**
+ * Get program stages for a program type
+ */
+export const getProgramStages = (programType: ProgramType): AdmissionsStage[] => {
+  return PROGRAM_ADMISSIONS_STAGES[programType] || PROGRAM_ADMISSIONS_STAGES.undergraduate
+}
+
+/**
+ * Get all admissions stages
+ */
+export const getAllAdmissionsStages = (): AdmissionsStageInfo[] => {
+  return ADMISSIONS_STAGES
+}
+
+/**
+ * Get admissions flow summary
+ */
+export const getAdmissionsFlowSummary = (currentStage: AdmissionsStage, programType: ProgramType): {
+  currentStage: string
+  progress: number
+  completedStages: number
+  totalStages: number
+  remainingStages: AdmissionsStage[]
+} => {
+  const progress = getAdmissionsProgressPercentage(currentStage)
+  const currentIndex = ADMISSIONS_STAGES.findIndex(s => s.id === currentStage)
+  const completedStages = currentIndex + 1
+  const totalStages = ADMISSIONS_STAGES.length
+  
+  return {
+    currentStage,
+    progress,
+    completedStages,
+    totalStages,
+    remainingStages: getAdmissionsRemainingStages(currentStage),
+  }
+}
+
+/**
+ * Get admissions stage progress
+ */
+export const getAdmissionsStageProgress = (stage: AdmissionsStage) => {
+  const stageInfo = getAdmissionsStageInfo(stage)
+  const progress = getAdmissionsProgressPercentage(stage)
+  const allowed = getAllowedAdmissionsTransitions(stage)
+  const next = getNextAdmissionsStage(stage)
+  
+  return {
+    stage: stageInfo,
+    progress,
+    allowedNextStages: allowed,
+    nextStage: next,
+  }
+}
+
+/**
+ * Get remaining stages
+ */
+export const getAdmissionsRemainingStages = (currentStage: AdmissionsStage): AdmissionsStage[] => {
+  const currentIndex = ADMISSIONS_STAGES.findIndex(s => s.id === currentStage)
+  if (currentIndex === -1) return []
+  
+  return ADMISSIONS_STAGES.slice(currentIndex + 1).map(s => s.id)
+}
+
+/**
+ * Validate admissions transition
+ */
+export const validateAdmissionsTransition = (
+  currentStage: AdmissionsStage,
+  targetStage: AdmissionsStage
+): { valid: boolean; reason?: string } => {
+  // Same stage - no transition needed
+  if (currentStage === targetStage) {
+    return { valid: true }
+  }
+  
+  const currentIndex = ADMISSIONS_STAGES.findIndex(s => s.id === currentStage)
+  const targetIndex = ADMISSIONS_STAGES.findIndex(s => s.id === targetStage)
+  
+  // Can only move forward or stay
+  if (targetIndex < currentIndex) {
+    return {
+      valid: false,
+      reason: 'Cannot move backwards in the admissions process',
+    }
+  }
+  
+  return { valid: true }
+}
+
+/**
+ * Get allowed admissions transitions
+ */
+export const getAllowedAdmissionsTransitions = (currentStage: AdmissionsStage): AdmissionsStage[] => {
+  const currentIndex = ADMISSIONS_STAGES.findIndex(s => s.id === currentStage)
+  if (currentIndex === -1 || currentIndex >= ADMISSIONS_STAGES.length - 1) {
+    return []
+  }
+  
+  // Can only advance to next stage
+  return [ADMISSIONS_STAGES[currentIndex + 1].id]
+}
+
+/**
+ * Calculate admissions completion
+ */
+export const calculateAdmissionsCompletion = (stage: AdmissionsStage): number => {
+  return getAdmissionsProgressPercentage(stage)
+}
+
+/**
+ * Process acceptance (placeholder)
+ */
+export const processAcceptance = async (applicationId: string): Promise<{ success: boolean }> => {
+  console.log('Processing acceptance for:', applicationId)
+  return { success: true }
+}

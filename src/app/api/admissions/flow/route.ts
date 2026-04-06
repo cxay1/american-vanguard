@@ -14,27 +14,29 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { 
-  validateAdmissionsTransition, 
-  getAdmissionsFlowSummary, 
+import { auth } from '@clerk/nextjs/server'
+import {
+  AdmissionsStage,
+  ProgramType,
+  ADMISSIONS_TO_APPLICATION_STATUS,
+  ADMISSIONS_STAGES,
+  getAdmissionsStageInfo,
+  getNextAdmissionsStage,
+  getAdmissionsProgressPercentage,
+  PROGRAM_ADMISSIONS_STAGES,
+  getProgramStages,
+  getAllAdmissionsStages,
+  getAdmissionsFlowSummary,
   getAdmissionsStageProgress,
+  getAdmissionsRemainingStages,
+  validateAdmissionsTransition,
   getAllowedAdmissionsTransitions,
   calculateAdmissionsCompletion,
-  getAllAdmissionsStages,
-  getProgramStages,
-} from '@/services/university/admissionsFlowService'
-import { processAcceptance } from '@/services/acceptanceLetterService'
-import { 
-  AdmissionsStage, 
-  ADMISSIONS_TO_APPLICATION_STATUS, 
-  ADMISSIONS_STAGES,
-  ProgramType,
+  processAcceptance,
 } from '@/types/university/admissionsFlow'
 
-/**
- * GET /api/admissions/flow
- * Get admissions flow information and current stage
- */
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
