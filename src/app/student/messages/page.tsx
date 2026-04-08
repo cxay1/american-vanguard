@@ -128,7 +128,16 @@ export default function StudentMessagesPage() {
 
   return (
     <StudentLayout>
-      <div className="flex h-[calc(100vh-2rem)] m-4 bg-neutral-900 rounded-xl overflow-hidden border border-neutral-800">
+      <div className="min-h-screen bg-neutral-950">
+      <div className="bg-neutral-900 border-b border-neutral-800 px-6 py-4">
+        <div>
+          <h1 className="text-2xl font-bold text-white">Messages</h1>
+          <p className="text-sm text-neutral-400 mt-1">Chat with instructors and peers</p>
+        </div>
+      </div>
+
+      <div className="p-6">
+        <div className="flex h-[calc(100vh-12rem)] bg-neutral-900 rounded-xl overflow-hidden border border-neutral-800">
         {/* Conversations List */}
         <div className="w-80 border-r border-neutral-800 flex flex-col">
           <div className="p-4 border-b border-neutral-800">
@@ -144,7 +153,7 @@ export default function StudentMessagesPage() {
               <input
                 type="text"
                 placeholder="Search conversations..."
-                className="w-full pl-10 pr-4 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-yellow-600"
+                className="w-full pl-10 pr-4 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm text-white placeholder-neutral-500 focus:outline-none focus:border-yellow-500"
               />
             </div>
           </div>
@@ -152,7 +161,7 @@ export default function StudentMessagesPage() {
           <div className="flex-1 overflow-y-auto">
             {loading ? (
               <div className="flex items-center justify-center p-8">
-                <Loader2 className="w-6 h-6 text-yellow-600 animate-spin" />
+                <Loader2 className="w-6 h-6 text-yellow-500 animate-spin" />
               </div>
             ) : conversations.length === 0 ? (
               <div className="p-8 text-center">
@@ -166,7 +175,7 @@ export default function StudentMessagesPage() {
                   onClick={() => setSelectedConversation(conv)}
                   className={`w-full p-4 text-left border-b border-neutral-800 transition-colors ${
                     selectedConversation?.id === conv.id
-                      ? 'bg-yellow-600/20'
+                      ? 'bg-yellow-500/20'
                       : 'hover:bg-neutral-800'
                   }`}
                 >
@@ -221,7 +230,7 @@ export default function StudentMessagesPage() {
                       <div
                         className={`max-w-[70%] px-4 py-2 rounded-lg ${
                           isOwn
-                            ? 'bg-yellow-600 text-white'
+                            ? 'bg-yellow-500 text-white'
                             : 'bg-neutral-800 text-neutral-200'
                         }`}
                       >
@@ -245,12 +254,12 @@ export default function StudentMessagesPage() {
                     onChange={(e) => setNewMessage(e.target.value)}
                     onKeyDown={handleKeyPress}
                     placeholder="Type a message..."
-                    className="flex-1 px-4 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-white placeholder-neutral-500 focus:outline-none focus:border-yellow-600"
+                    className="flex-1 px-4 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-white placeholder-neutral-500 focus:outline-none focus:border-yellow-500"
                   />
                   <button
                     onClick={sendMessage}
                     disabled={!newMessage.trim() || sending}
-                    className="p-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    className="p-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   >
                     {sending ? (
                       <Loader2 className="w-5 h-5 animate-spin" />
@@ -271,7 +280,9 @@ export default function StudentMessagesPage() {
             </div>
           )}
         </div>
+        </div>
       </div>
+    </div>
     </StudentLayout>
   )
 }
