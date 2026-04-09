@@ -16,7 +16,7 @@ import { db } from '@/lib/prisma'
 import { AdmissionStatus, AdmissionType, ApplicationTerm } from '@/types/prisma'
 
 // Mock the database
-jest.mock('@/lib/db', () => ({
+jest.mock('@/lib/prisma', () => ({
   db: {
     admissionApplication: {
       findUnique: jest.fn(),

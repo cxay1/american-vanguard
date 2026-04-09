@@ -93,4 +93,6 @@ export const FormTextarea = forwardRef<HTMLTextAreaElement, FormTextareaProps>(
 )
 FormTextarea.displayName = 'FormTextarea'
 
-export default { FormInput, FormSelect, FormTextarea }
+const formFieldsExport = { FormInput, FormSelect, FormTextarea }
+
+export default formFieldsExport

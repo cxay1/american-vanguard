@@ -17,7 +17,7 @@ jest.mock('@clerk/nextjs/server', () => ({
   auth: (...args: unknown[]) => mockAuth(...args),
 }))
 
-jest.mock('@/lib/db', () => ({
+jest.mock('@/lib/prisma', () => ({
   db: {
     user: {
       findUnique: (...args: unknown[]) => mockFindUnique(...args),
